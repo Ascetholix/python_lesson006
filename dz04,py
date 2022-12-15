@@ -1,0 +1,117 @@
+from tkinter import*
+
+root = Tk()
+# Окно
+root.title('ИГРА С КОНФЕТАМИ')
+root.geometry("400x120+400+300")
+root.config(bg='#FFC400') 
+root.resizable(width=False, height=False)
+
+def users(arg,value):
+  global coins
+  global usercons1
+  global usercons2
+  global count
+  if coins ==0:
+    if count == 1:           # Условия последнего хода
+      usercons1 +=usercons2
+      usercons2 = 0
+      lbusercoins1['text'] = f'{usercons1}'
+      lbusercoins2['text'] = f'{usercons2}'
+      lbInfo['text']= f'Поздаврляю победил игрок 1'
+    else:
+      usercons2 +=usercons1
+      usercons1 = 0
+      lbusercoins1['text'] = f'{usercons1}'
+      lbusercoins2['text'] = f'{usercons2}'
+      lbInfo['text']= f'Поздаврляю победил игрок 2 '
+
+  else:   
+    if arg==0:
+      user1= value
+      if coins<user1:
+        lbInfo['text']= f'Неверное число пожалуйста введи число от 1 до {coins}'
+        ent.delete(0,END)
+      else:
+        coins = coins - user1
+        usercons1 += user1
+        lbusercoins1['text'] = f'{usercons1}'
+        ent.delete(0,END)
+        count = 1
+    else:
+      user2= value
+      if coins<user2:
+        lbInfo['text']= f'Неверное число пожалуйста введи число от 1 до {coins}'
+        ent.delete(0,END)
+      else: 
+        coins = coins - user2
+        usercons2 += user2
+        lbusercoins2['text'] = f'{usercons2}'
+        ent.delete(0,END)
+        count = 0          
+    lbCoins['text'] = f'{coins}'
+
+
+def counter():
+  global count
+  value = ent.get()
+  
+  if value.isdigit():
+    value = int(value)
+    if value > 28 or value <= 0:
+      ent.delete(0,END)
+      lbInfo['text']= 'Неверное число пожалуйста введи число от 1 до 28'
+    else:
+      users(count,value)
+      btn['text'] = f'Ход Игрок {(count)+1}'
+  else:
+    ent.delete(0,END)
+    lbInfo['text']= 'Ввели строку пожалуйста введи число от 1 до 28'
+    
+
+  
+coins= 2021
+usercons1 = 0
+usercons2 = 0
+count = 0
+
+Label(text='Введите число от 1 до 28',bg='#AFC6B1',font=('Arial', 10, 'bold')).grid(row=0,column=0)
+Label(text="Количество конфет = ",font=('Arial', 10, 'bold')).grid(row=0,column=1)
+Label(text='Конфдеты Игрока 1 = ',bg='#AFC6B1',font=('Arial', 10, 'bold')).grid(row=1,column=1)
+Label(text='Конфдеты Игрока 2 = ',bg='#AFC6B1',font=('Arial', 10, 'bold')).grid(row=2,column=1)
+
+
+lbusercoins1 = Label(text=f'{usercons1}',font=('Arial', 10, 'bold'))
+lbusercoins2 = Label(text=f'{usercons2}',font=('Arial', 10, 'bold'))
+lbInfo = Label(bg='#FFC400',font=('Arial', 10, 'bold'))
+
+
+lbCoins = Label(text=f'{coins}',font=('Arial', 10, 'bold'))
+
+ent = Entry(textvariable=int)
+btn = Button(text=f'Ход Игрок {(count)+1}',
+                 command=lambda: counter(),
+                 activebackground='blue',
+                 bg = 'red',
+                 font=('Arial', 10, 'bold'))
+
+
+lbusercoins1.grid(row=1,column=2)
+lbusercoins2.grid(row=2,column=2)
+lbInfo.grid(row=3,column=0,columnspan=3,stick= 'we')
+
+lbCoins.grid(row=0,column=2)
+
+ent.grid(row=1,column=0,stick = 'w')
+btn.grid(row=2,column=0,stick = 'w')
+
+root.grid_columnconfigure(0,minsize=100)
+root.grid_columnconfigure(1,minsize=100)
+root.grid_columnconfigure(2,minsize=100)
+
+root.grid_rowconfigure(0,minsize=30)
+root.grid_rowconfigure(1,minsize=30)
+root.grid_rowconfigure(2,minsize=30)
+root.grid_rowconfigure(3,minsize=30)
+
+root.mainloop()
